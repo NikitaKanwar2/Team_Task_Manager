@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
-const API_URL = 'https://teamtaskmanager-production-2252.up.railway.app/api';
+const API_URL = 'https://teamtaskmanager-production-f562.up.railway.app/api';
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
