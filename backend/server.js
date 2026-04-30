@@ -18,9 +18,12 @@ const app = express();
 
 // Enable CORS at the very top
 app.use(cors({
-  origin: 'https://courteous-reverence-production.up.railway.app',
+  origin: true, // Dynamically allow whatever origin is calling
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
+app.options('*', cors()); // Explicitly handle preflight for all routes
 
 // Body parser
 app.use(express.json());
