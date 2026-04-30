@@ -15,15 +15,11 @@ const dashboard = require('./routes/dashboard');
 
 const app = express();
 
+// Enable CORS at the very top
+app.use(cors());
+
 // Body parser
 app.use(express.json());
-
-// Enable CORS
-app.use(cors({
-  origin: '*', // Allows all origins for the assignment simplicity
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
