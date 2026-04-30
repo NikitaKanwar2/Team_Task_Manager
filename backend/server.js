@@ -17,19 +17,16 @@ const dashboard = require('./routes/dashboard');
 const app = express();
 
 // Enable CORS with more robust options
+// Enable CORS
 app.use(cors({
-  origin: (origin, callback) => {
-    // Allow requests with no origin (like mobile apps or curl)
-    if (!origin) return callback(null, true);
-    
-    // In production, you can set CORS_ORIGIN to your frontend URL
-    // If not set, we'll allow the current request origin to support credentials
-    callback(null, true);
-  },
+  origin: true, // This reflects the request origin, which is required for credentials
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Handle preflight requests
+app.options('*', cors());
 
 // Body parser
 app.use(express.json());
