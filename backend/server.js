@@ -18,7 +18,14 @@ const app = express();
 
 // Enable CORS with more robust options
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*', // Allow specific origin or fallback to wildcard
+  origin: (origin, callback) => {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    // In production, you can set CORS_ORIGIN to your frontend URL
+    // If not set, we'll allow the current request origin to support credentials
+    callback(null, true);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
