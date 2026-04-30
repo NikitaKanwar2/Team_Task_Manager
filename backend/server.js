@@ -16,8 +16,10 @@ const dashboard = require('./routes/dashboard');
 const app = express();
 
 // Enable CORS at the very top
-app.use(cors());
-app.options('*', cors()); // Explicitly handle preflight requests
+app.use(cors({
+  origin: 'https://courteous-reverence-production.up.railway.app',
+  credentials: true
+}));
 
 // Body parser
 app.use(express.json());
