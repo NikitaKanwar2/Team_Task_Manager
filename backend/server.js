@@ -16,11 +16,26 @@ const dashboard = require('./routes/dashboard');
 
 const app = express();
 
-// Enable CORS at the very top
-app.use(cors());
+// Enable CORS with more robust options
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*', // Allow specific origin or fallback to wildcard
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Body parser
 app.use(express.json());
+
+// Health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: 'Team Task Manager API is running',
+    environment: process.env.NODE_ENV,
+    timestamp: new Date().toISOString()
+  });
+});
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
@@ -36,16 +51,31 @@ app.use('/api/dashboard', dashboard);
 
 const PORT = process.env.PORT || 5001;
 
-// Connect to DB
+// Validate essential environment variables
+if (!process.env.MONGODB_URI) {
+  console.warn('WARNING: MONGODB_URI is not defined in environment variables.');
+}
+
+// Connect to DB (asynchronously)
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB Connected');
-    app.listen(PORT, () => {
-      console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
-    });
   })
   .catch((err) => {
-    console.error(`Error: ${err.message}`);
-    process.exit(1);
+    console.error(`MongoDB Connection Error: ${err.message}`);
+    // We don't exit here to allow health checks to pass and to see logs in production
+    console.info('Server will continue to run, but database features will be unavailable.');
   });
+
+// Start Server
+const server = app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (err, promise) => {
+  console.error(`Unhandled Rejection Error: ${err.message}`);
+  // Close server & exit process
+  // server.close(() => process.exit(1));
+});

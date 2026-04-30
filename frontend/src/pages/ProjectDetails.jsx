@@ -13,6 +13,7 @@ import {
   User as UserIcon
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ProjectDetails = () => {
   const { id } = useParams();
@@ -44,8 +45,8 @@ const ProjectDetails = () => {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      const projectRes = await axios.get(`http://localhost:5001/api/projects/${id}`, config);
-      const tasksRes = await axios.get(`http://localhost:5001/api/projects/${id}/tasks`, config);
+      const projectRes = await axios.get(`${API_URL}/projects/${id}`, config);
+      const tasksRes = await axios.get(`${API_URL}/projects/${id}/tasks`, config);
       
       setProject(projectRes.data.data);
       setTasks(tasksRes.data.data);
@@ -61,7 +62,7 @@ const ProjectDetails = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post(`http://localhost:5001/api/projects/${id}/tasks`, newTask, {
+      await axios.post(`${API_URL}/projects/${id}/tasks`, newTask, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowTaskModal(false);
@@ -76,7 +77,7 @@ const ProjectDetails = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5001/api/projects/${id}/members`, { email: memberEmail }, {
+      await axios.put(`${API_URL}/projects/${id}/members`, { email: memberEmail }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowMemberModal(false);
@@ -90,7 +91,7 @@ const ProjectDetails = () => {
   const handleUpdateStatus = async (taskId, newStatus) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put(`http://localhost:5001/api/tasks/${taskId}`, { status: newStatus }, {
+      await axios.put(`${API_URL}/tasks/${taskId}`, { status: newStatus }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchProjectAndTasks();
@@ -103,7 +104,7 @@ const ProjectDetails = () => {
     if (!window.confirm('Delete this task?')) return;
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:5001/api/tasks/${taskId}`, {
+      await axios.delete(`${API_URL}/tasks/${taskId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       fetchProjectAndTasks();

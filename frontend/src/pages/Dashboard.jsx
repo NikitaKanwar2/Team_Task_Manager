@@ -8,6 +8,7 @@ import {
   Calendar
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Dashboard = () => {
   const [stats, setStats] = useState(null);
@@ -18,7 +19,7 @@ const Dashboard = () => {
     const fetchStats = async () => {
       try {
         const token = localStorage.getItem('token');
-        const res = await axios.get('http://localhost:5001/api/dashboard', {
+        const res = await axios.get(`${API_URL}/dashboard`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setStats(res.data.data);

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Plus, Folder, Users, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -18,7 +19,7 @@ const Projects = () => {
   const fetchProjects = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('http://localhost:5001/api/projects', {
+      const res = await axios.get(`${API_URL}/projects`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProjects(res.data.data);
@@ -33,7 +34,7 @@ const Projects = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5001/api/projects', newProject, {
+      await axios.post(`${API_URL}/projects`, newProject, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setShowModal(false);
