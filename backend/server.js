@@ -19,7 +19,11 @@ const app = express();
 app.use(express.json());
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+  origin: '*', // Allows all origins for the assignment simplicity
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Dev logging middleware
 if (process.env.NODE_ENV === 'development') {
