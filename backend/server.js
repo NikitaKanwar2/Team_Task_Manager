@@ -17,6 +17,7 @@ const app = express();
 
 // Enable CORS at the very top
 app.use(cors());
+app.options('*', cors()); // Explicitly handle preflight requests
 
 // Body parser
 app.use(express.json());
