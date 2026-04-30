@@ -7,7 +7,8 @@ import {
   CheckSquare, 
   LogOut, 
   User as UserIcon,
-  Bell
+  Bell,
+  Search
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -21,104 +22,68 @@ const Sidebar = () => {
 
   return (
     <div className="glass" style={{ 
-      width: '260px', 
+      width: '280px', 
       height: 'calc(100vh - 40px)', 
       margin: '20px',
-      padding: '2rem 1rem',
+      padding: '2rem 1.25rem',
       display: 'flex',
       flexDirection: 'column',
       position: 'fixed',
       zIndex: 100
     }}>
-      <div style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '1rem' }}>
+      <div style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', gap: '12px', paddingLeft: '0.5rem' }}>
         <div style={{ 
-          width: '40px', 
-          height: '40px', 
+          width: '42px', 
+          height: '42px', 
           background: 'linear-gradient(135deg, var(--primary), var(--secondary))',
-          borderRadius: '10px',
+          borderRadius: '12px',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          boxShadow: '0 8px 16px rgba(99, 102, 241, 0.3)'
         }}>
           <CheckSquare color="white" size={24} />
         </div>
-        <h1 style={{ fontSize: '1.5rem', fontWeight: '800', background: 'linear-gradient(to right, #fff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: '800' }} className="gradient-text">
           Ethara
         </h1>
       </div>
 
-      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <NavLink 
-          to="/" 
-          style={({ isActive }) => ({
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '0.75rem 1rem',
-            borderRadius: '10px',
-            textDecoration: 'none',
-            color: isActive ? 'white' : 'var(--text-muted)',
-            background: isActive ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
-            border: isActive ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid transparent',
-            transition: 'all 0.2s'
-          })}
-        >
+      <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <NavLink to="/" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
         </NavLink>
 
-        <NavLink 
-          to="/projects" 
-          style={({ isActive }) => ({
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '0.75rem 1rem',
-            borderRadius: '10px',
-            textDecoration: 'none',
-            color: isActive ? 'white' : 'var(--text-muted)',
-            background: isActive ? 'rgba(99, 102, 241, 0.2)' : 'transparent',
-            border: isActive ? '1px solid rgba(99, 102, 241, 0.3)' : '1px solid transparent',
-            transition: 'all 0.2s'
-          })}
-        >
+        <NavLink to="/projects" className={({ isActive }) => `sidebar-link ${isActive ? 'active' : ''}`}>
           <FolderKanban size={20} />
           <span>Projects</span>
         </NavLink>
       </nav>
 
-      <div style={{ marginTop: 'auto', borderTop: '1px solid var(--glass-border)', paddingTop: '1.5rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem', paddingLeft: '1rem' }}>
+      <div style={{ marginTop: 'auto', borderTop: '1px solid var(--glass-border)', paddingTop: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem', paddingLeft: '0.5rem' }}>
           <div style={{ 
-            width: '36px', 
-            height: '36px', 
-            borderRadius: '50%', 
+            width: '40px', 
+            height: '40px', 
+            borderRadius: '12px', 
             background: 'var(--surface)', 
             display: 'flex', 
             justifyContent: 'center', 
             alignItems: 'center',
             border: '1px solid var(--surface-border)'
           }}>
-            <UserIcon size={18} />
+            <UserIcon size={20} />
           </div>
-          <div>
-            <p style={{ fontSize: '0.875rem', fontWeight: '600' }}>{user?.name}</p>
+          <div style={{ overflow: 'hidden' }}>
+            <p style={{ fontSize: '0.9rem', fontWeight: '700', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{user?.name}</p>
             <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'capitalize' }}>{user?.role}</p>
           </div>
         </div>
         <button 
           onClick={handleLogout}
-          style={{ 
-            display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '0.75rem 1rem',
-            width: '100%',
-            color: '#ef4444',
-            background: 'transparent',
-            borderRadius: '10px',
-            textAlign: 'left'
-          }}
+          className="sidebar-link"
+          style={{ width: '100%', color: '#ef4444', border: 'none', background: 'transparent', cursor: 'pointer' }}
         >
           <LogOut size={20} />
           <span>Logout</span>
@@ -132,16 +97,38 @@ const Layout = ({ children }) => {
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar />
-      <main style={{ flex: 1, marginLeft: '300px', padding: '2rem' }}>
-        <header style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
-          <button style={{ width: '40px', height: '40px', display: 'flex', justifyContent: 'center', alignItems: 'center' }} className="btn-secondary">
-            <Bell size={20} />
-          </button>
+      <main style={{ flex: 1, marginLeft: '320px', padding: '2rem 3rem' }}>
+        <header style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: '3rem',
+          padding: '1rem 0'
+        }}>
+          <div style={{ position: 'relative', width: '300px' }}>
+            <Search size={18} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+            <input 
+              type="text" 
+              placeholder="Search tasks..." 
+              style={{ paddingLeft: '40px', marginBottom: 0, height: '42px', fontSize: '0.9rem' }}
+            />
+          </div>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button className="btn-secondary" style={{ width: '42px', height: '42px', padding: 0 }}>
+              <Bell size={20} />
+            </button>
+            <div style={{ width: '42px', height: '42px', borderRadius: '12px', overflow: 'hidden', border: '2px solid var(--primary)' }}>
+               <img src={`https://ui-avatars.com/api/?name=${encodeURIComponent('User')}&background=6366f1&color=fff`} alt="profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          </div>
         </header>
-        {children}
+        <div className="animate-fade-in">
+          {children}
+        </div>
       </main>
     </div>
   );
 };
 
 export default Layout;
+
